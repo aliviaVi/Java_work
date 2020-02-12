@@ -76,10 +76,11 @@ public class OurTreeSet<E> implements OurSet<E> {
         //when node has no child nodes
         if (current.left == null && current.right == null) {
             if (current == root) root = null;
-            if (isLeft)
+            if (isLeft) {
                 nodeParent.left = null;
-        } else {
-            nodeParent.right = null;
+            } else {
+                nodeParent.right = null;
+            }
         }
         //when node to delete has one child
           if  (current.right == null){
@@ -135,13 +136,14 @@ public class OurTreeSet<E> implements OurSet<E> {
             linealRemove( nodeToRemove);
         else
             junctionRemove(nodeToRemove);
+        size--;
     return true;
 
     }
 
     private void junctionRemove(TreeNode<E> nodeToRemove) {
         TreeNode<E> needle=nodeToRemove.right;
-        while (needle!=null)
+        while (needle.left!=null)
             needle=needle.left;
 
         nodeToRemove.key=needle.key;
@@ -209,17 +211,36 @@ public class OurTreeSet<E> implements OurSet<E> {
 
     @Override
     public boolean addAll(OurSet<E> other) {
-        return false;
+
+        boolean res=false;
+
+        for(E elt: other){
+            res = this.add(elt) | res;
+
+        }
+        return res;
     }
 
     @Override
     public boolean removeAll(OurSet<E> other) {
-        return false;
+        boolean res= false;
+        for (E elt:other) {
+            res=this.remove2(elt) | res;
+
+        }
+        return res;
     }
 
     @Override
     public boolean retainAll(OurSet<E> other) {
-        return false;
+        OurSet<E> thisSubtractedOther = new OurTreeSet<>();
+
+        for (E elt : this) {
+            if (!other.contains(elt))
+                thisSubtractedOther.add(elt);
+        }
+
+        return this.removeAll(thisSubtractedOther);
     }
 
     @Override
@@ -246,10 +267,12 @@ class OurTreeSetIterator<E> implements Iterator<E> {
         this.current = treeSet.root == null ? null : getLeast(treeSet.root);
     }
 
-    private OurTreeSet.TreeNode<E> getLeast(OurTreeSet.TreeNode root) {
-        OurTreeSet.TreeNode<E> needle = root.right;
-        while (needle != null)
+    private OurTreeSet.TreeNode<E> getLeast(OurTreeSet.TreeNode<E> root) {
+        OurTreeSet.TreeNode<E> needle = root;
+
+        while (needle.left != null)
             needle = needle.left;
+
         return needle;
     }
 
@@ -279,7 +302,9 @@ class OurTreeSetIterator<E> implements Iterator<E> {
      */
     private OurTreeSet.TreeNode<E> firstRightParent(OurTreeSet.TreeNode<E> current) {
 
-
-        return null;
+        OurTreeSet.TreeNode<E> needle = current;
+        while ( needle.parent != null && needle.parent.left != needle)
+            needle = needle.parent;
+        return needle.parent;
     }
 }

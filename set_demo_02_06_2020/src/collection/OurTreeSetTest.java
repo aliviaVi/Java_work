@@ -3,8 +3,10 @@ package collection;
 import org.junit.Test;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -129,7 +131,7 @@ public class OurTreeSetTest {
         ourTreeSet.add(10);
         ourTreeSet.add(18);
         ourTreeSet.add(12);
-        ourTreeSet.remove(12);
+        ourTreeSet.remove(10);
         assertEquals(2, ourTreeSet.size());
         assertFalse(ourTreeSet.contains(7));
     }
@@ -162,7 +164,7 @@ public class OurTreeSetTest {
         ourTreeSet.add(7);
         ourTreeSet.add(11);
         ourTreeSet.add(45);
-        ourTreeSet.remove(11);
+        ourTreeSet.remove2(11);
         assertEquals(3, ourTreeSet.size());
         assertTrue(ourTreeSet.contains(24));
     }
@@ -182,6 +184,113 @@ public class OurTreeSetTest {
         assertFalse(ourTreeSet.contains(sample01));
     }
 
+    @Test
+    public void iterator_test() {
+        ourTreeSet.add(3);
+        ourTreeSet.add(1);
+        ourTreeSet.add(5);
+        ourTreeSet.add(2);
+        ourTreeSet.add(4);
+
+        List<Integer> exp = Arrays.asList(1, 2, 3, 4, 5);
+        OurTreeSetIterator<Integer> act = new OurTreeSetIterator<>(ourTreeSet);
+        List<Integer> res = new ArrayList<>();
+        while (act.hasNext()) {
+            res.add(act.next());
+
+        }
+        assertEquals(exp, res);
+
+    }
+    @Test
+    public void addAll_updates_set_with_element_from_other() {
+        OurSet<Integer> set = new OurTreeSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+
+        OurSet<Integer> otherSet = new OurTreeSet<>();
+        otherSet.add(1);
+        otherSet.add(4);
+        otherSet.add(5);
+
+        Integer[] expected = {1, 2, 3, 4, 5};
+
+        set.addAll(otherSet);
+
+        assertEquals(set.size(), expected.length);
+        for (Integer element : expected) {
+            assertTrue(set.contains(element));
+        }
+    }
+    @Test
+    public void removeAll_removes_elemnts_that_are_in_other_set() {
+        OurSet<Integer> set = new OurTreeSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+
+        OurSet<Integer> otherSet = new OurTreeSet<>();
+        otherSet.add(1);
+        otherSet.add(2);
+        otherSet.add(4);
+        otherSet.add(5);
+
+        Integer[] expected = {3};
+
+        set.removeAll(otherSet);
+
+        assertEquals(set.size(), expected.length);
+        for (Integer element : expected) {
+            assertTrue(set.contains(element));
+        }
+    }
+    @Test
+    public void retainAll_keeps_only_elements_that_are_in_other_set() {
+        OurSet<Integer> set = new OurTreeSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+
+        OurSet<Integer> otherSet = new OurTreeSet<>();
+        otherSet.add(1);
+        otherSet.add(5);
+        otherSet.add(4);
+        otherSet.add(2);
+
+        Integer[] expected = {1, 2};
+
+        boolean res = set.retainAll(otherSet);
+
+        assertEquals(set.size(), expected.length);
+        assertTrue(res);
+        for (Integer element : expected) {
+            assertTrue(set.contains(element));
+        }
+    }
+
+    @Test
+    public void retainAll_firstSetIsPlacedInOther() {
+        OurSet<Integer> set = new OurTreeSet<>();
+        set.add(1);
+        set.add(2);
+
+        OurSet<Integer> otherSet = new OurTreeSet<>();
+        otherSet.add(1);
+        otherSet.add(5);
+        otherSet.add(4);
+        otherSet.add(2);
+
+        Integer[] expected = {1, 2};
+
+        boolean res = set.retainAll(otherSet);
+
+        assertEquals(expected.length, set.size());
+        assertFalse(res);
+        for (Integer element : expected) {
+            assertTrue(set.contains(element));
+        }
+    }
 }
 
 
