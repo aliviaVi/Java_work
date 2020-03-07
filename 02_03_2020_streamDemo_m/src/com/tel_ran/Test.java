@@ -15,7 +15,7 @@ public class Test {
     @org.junit.Test
     public  void test_sumOfCancelledTransactions(){
         Transaction tr1=new Transaction("89053425",State.FINISHED,2894);
-        Transaction tr2=new Transaction("89034264356677", State.CANCELLED,320);
+        Transaction tr2=new Transaction("89034264356677", State.CANCELLED,1320);
         Transaction tr3= new Transaction("432158543", State.CANCELLED, 1200);
         Transaction tr4=new Transaction("79456437", State.PROCESS, 3214);
         Transaction tr5=new Transaction("7946534437", State.CANCELLED, 100);
@@ -36,7 +36,7 @@ public class Test {
 
         TransactionService transactionService=new TransactionService();
 
-        assertEquals(4520, transactionService.sumOfCancelledTransactions(accountList));
+        assertEquals(5520, transactionService.sumOfCancelledTransactions(accountList));
 
     }
 
