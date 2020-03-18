@@ -3,9 +3,12 @@ package com.tel_ran;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.partitioningBy;
 
 public class Main {
 
@@ -55,4 +58,14 @@ public class Main {
                 .reduce((currentResult, currentNum) -> currentResult * currentNum)
                 .orElse(0);
     }
+    public static Map<Boolean, List<String>> palindromeSplitting(Collection<String> strings) {
+        return strings.stream()
+                .collect(partitioningBy(
+                        str -> new StringBuilder(str)
+                                .reverse()
+                                .toString()
+                                .equals(str)));
+    }
+
+
 }
