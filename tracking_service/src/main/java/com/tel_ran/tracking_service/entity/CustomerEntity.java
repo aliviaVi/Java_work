@@ -23,4 +23,14 @@ public class CustomerEntity {
     @OneToMany
     List<ShipmentEntity> shipments;
 
+    public CustomerEntity(String firstName, String lastName) {
+        this.firstName=firstName;
+        this.lastName=lastName;
+    }
+
+    public CustomerEntity(Long customer_id,String firstName, String lastName) {
+        this.customer_id = customer_id;
+        this.firstName=firstName;
+        this.lastName=lastName;
+    }
 }

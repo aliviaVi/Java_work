@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ShipmentRepository extends JpaRepository<ShipmentEntity,Long> {
-
+/*
     @Query("select s from ShipmentEntity as s join s.customerEntity customer where customer.id=:id")
-    List<ShipmentEntity> getAllShipmentsByCustomerId(@Param("id") Long id);
+    List<ShipmentEntity> getAllShipmentsByCustomerId(@Param("id") Long id);*/
 }

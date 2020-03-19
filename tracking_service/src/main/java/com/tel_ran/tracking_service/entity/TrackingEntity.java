@@ -17,8 +17,8 @@ public class TrackingEntity {
     private Long tracking_id;
 
     private StatusTracking statusTracking;
-    @OneToOne
-    @JoinColumn(name = "shipment_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn//(name = "shipment_id")
     private ShipmentEntity shipmentId;
 }
 

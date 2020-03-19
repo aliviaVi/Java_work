@@ -12,7 +12,7 @@ public interface CustomerService {
 
     void update(CustomerEntity customer, Long id);
 
-    void delete(Long id);
+    void deleteById(Long id);
 
     CustomerEntity getCustomerById(Long id);
 

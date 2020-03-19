@@ -8,6 +8,7 @@ import com.tel_ran.tracking_service.entity.ShipmentEntity;
 import com.tel_ran.tracking_service.service.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class CustomerController {
     ModelMapper modelMapper=new ModelMapper();
 
     @Autowired
-    public CustomerController(CustomerService customerService){
+    public CustomerController(@Qualifier("customerServiceImpl") CustomerService customerService){
         this.customerService=customerService;
     }
 
@@ -65,7 +66,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     void deleteCustomer(@PathVariable long id){
-        customerService.delete(id);
+        customerService.deleteById(id);
     }
 
 }

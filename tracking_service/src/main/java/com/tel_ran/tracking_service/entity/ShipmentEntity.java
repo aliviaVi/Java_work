@@ -17,6 +17,6 @@ public class ShipmentEntity {
     private Long shipment_id;
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="customer_id", insertable = false,updatable = false)
+    @JoinColumn//(name ="customer_id", insertable = false,updatable = false)
     private CustomerEntity customer_id;
 }
