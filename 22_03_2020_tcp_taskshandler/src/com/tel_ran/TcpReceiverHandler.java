@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class TcpReceiverHandler implements Runnable {
-    public static AtomicInteger countTasks;
+   // public static AtomicInteger countTasks=new AtomicInteger(0);
 
     private static final String WRONG_OPERATION = "wrong operation";
     private static final String INCORRECT_LINE = "incorrect line";
@@ -26,6 +26,11 @@ public class TcpReceiverHandler implements Runnable {
         this.socket = socket;
     }
 
+    public TcpReceiverHandler() {
+    }
+
+
+
     @Override
     public void run() {
         try {
@@ -35,6 +40,7 @@ public class TcpReceiverHandler implements Runnable {
 
             String line;
             while (isAlive) {
+              //  countTasks.getAndIncrement();
                 if ((line = socketInput.readLine()) == null) {
                     isAlive = false;
                     return;
@@ -51,10 +57,10 @@ public class TcpReceiverHandler implements Runnable {
                         socketOutput.println(line + " " + WRONG_OPERATION);
                     } else {
                         socketOutput.println( operation.operate(text));
-                        countTasks.getAndIncrement();
+
                     }
                 }
-                countTasks.decrementAndGet();
+               // countTasks.decrementAndGet();
                 socket.close();
 
             }
