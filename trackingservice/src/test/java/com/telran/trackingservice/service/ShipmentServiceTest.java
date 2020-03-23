@@ -37,7 +37,7 @@ public class ShipmentServiceTest {
     public void should_create_shipment(){
         CustomerEntity customerEntity=new CustomerEntity(2L,"ivan","petrov");
 
-        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter", customerEntity);
+        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter", customerEntity, null);
         when(shipmentRepository.save(shipmentEntity)).thenReturn(shipmentEntity);
 
         ShipmentEntity shipmentEntityFromService = shipmentService.create(shipmentEntity);
@@ -48,7 +48,7 @@ public class ShipmentServiceTest {
     @Test
     public void should_return_shipment_by_id(){
         CustomerEntity customerEntity=new CustomerEntity(2L,"ivan","petrov");
-        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter", customerEntity);
+        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter", customerEntity, null);
         Long shipment_id = shipmentEntity.getShipmentId();
         when(shipmentRepository.getOne(shipment_id)).thenReturn(shipmentEntity);
 

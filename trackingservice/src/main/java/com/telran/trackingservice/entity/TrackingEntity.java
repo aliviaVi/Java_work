@@ -15,13 +15,23 @@ public class TrackingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name = "track_id")
+    @Column(name = "tracking_id")
     private Long trackingId;
 
     private StatusTracking statusTracking;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn//(name = "shipment_id")
     private ShipmentEntity shipmentId;
+    @ManyToOne(optional = false)
+    private ShipmentEntity shipmentEntities;
+
+    public ShipmentEntity getShipmentEntities() {
+        return shipmentEntities;
+    }
+
+    public void setShipmentEntities(ShipmentEntity shipmentEntities) {
+        this.shipmentEntities = shipmentEntities;
+    }
 }
 
 

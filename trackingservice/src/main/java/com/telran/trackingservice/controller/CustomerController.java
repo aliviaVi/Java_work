@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/api/customers")
+@RequestMapping("/api")
 @RestController
 
 public class CustomerController {
@@ -27,11 +27,11 @@ public class CustomerController {
     ModelMapper modelMapper=new ModelMapper();
 
     @Autowired
-    public CustomerController(@Qualifier("customerServiceImpl") CustomerService customerService){
+    public CustomerController(@Qualifier(value = "customerServiceImpl") CustomerService customerService){
         this.customerService=customerService;
     }
 
-    @GetMapping
+    @GetMapping("/customers")
     List<CustomerDto> getAllCustomers(){
         return customerService.getAllCustomers()
                 .stream()
@@ -39,14 +39,14 @@ public class CustomerController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value="/{id}")
+    @GetMapping("/customers/{id}")
     CustomerDto getCustomerById(@PathVariable ("id") long id){
 
         CustomerEntity customerById = customerService.getCustomerById(id);
         CustomerDto customerDtoById = modelMapper.map(customerById, CustomerDto.class);
         return   customerDtoById;
     }
-    @GetMapping(value="/{id}")
+    @GetMapping("/customers/{id}")
     List<ShipmentDto> getAllShipmentsByCustomerId(@PathVariable("id") long customerId){
         List<ShipmentEntity> shipmentEntities = customerService.allShipments(customerId);
        return shipmentEntities.stream()
@@ -54,19 +54,19 @@ public class CustomerController {
         .collect(Collectors.toList());
     }
 
-    @PostMapping
+    @PostMapping("/customers")
     Long createNewCustomer(@RequestBody CustomerDto customerDto){
         CustomerEntity customerEntity = modelMapper.map(customerDto, CustomerEntity.class);
         return customerEntity.getCustomerId();
     }
-    @PutMapping(value="/{id}")
+    @PutMapping("/customers/{id}")
     ResponseEntity updateCustomer(@RequestBody @Valid CustomerDto customerDto, @PathVariable("id") long id){
         CustomerEntity customerEntity = modelMapper.map(customerDto, CustomerEntity.class);
         customerService.update(customerEntity, id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value="/{id}")
+    @DeleteMapping("/customers/{id}")
     void deleteCustomer(@PathVariable ("id") long id){
         customerService.deleteById(id);
     }

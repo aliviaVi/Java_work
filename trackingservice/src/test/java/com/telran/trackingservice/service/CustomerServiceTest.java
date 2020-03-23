@@ -56,7 +56,7 @@ public class CustomerServiceTest {
         CustomerEntity customerEntity=new CustomerEntity(2L,"ivan","petrov");
 
         Long customer_id = customerEntity.getCustomerId();
-        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter",customerEntity);
+        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter",customerEntity, null);
         List<ShipmentEntity> listShipment= new ArrayList<>();
         listShipment.add(shipmentEntity);
 
@@ -72,7 +72,7 @@ public class CustomerServiceTest {
         CustomerEntity customerEntity=new CustomerEntity(2L,"ivan","petrov");
 
         Long customer_id = customerEntity.getCustomerId();
-        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter",customerEntity);
+        ShipmentEntity shipmentEntity=new ShipmentEntity(1L,"letter",customerEntity, null);
         List<ShipmentEntity> listShipment= new ArrayList<>();
         listShipment.add(shipmentEntity);
         customerEntity.setShipments(listShipment);

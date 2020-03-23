@@ -23,7 +23,8 @@ public class CustomerEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "customer_id")
     List<ShipmentEntity> shipments;
 
     public CustomerEntity(String firstName, String lastName) {

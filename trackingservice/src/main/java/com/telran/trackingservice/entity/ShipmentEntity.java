@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +20,10 @@ public class ShipmentEntity {
     @Column(name = "title")
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn//(name ="customer_id", insertable = false,updatable = false)
+    @JoinColumn(name ="customer_id", insertable = false,updatable = false)
     private CustomerEntity customerId;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="shipment_id")
+    private List<TrackingEntity> tracking;
 }

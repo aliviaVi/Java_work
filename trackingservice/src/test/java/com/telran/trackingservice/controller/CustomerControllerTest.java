@@ -42,19 +42,29 @@ public class CustomerControllerTest {
     public void should_return_all_customers() throws Exception {
         CustomerDto customerDto=new CustomerDto("ivan","petrov");
         CustomerDto customerDto1=new CustomerDto("anna","mock");
-        List<CustomerDto> customerDtoList= Arrays.asList(customerDto,customerDto1);
-        CustomerEntity customerEntity = modelMapper.map(customerDto, CustomerEntity.class);
-        CustomerEntity customerEntity1 = modelMapper.map(customerDto1, CustomerEntity.class);
-        List<CustomerEntity> customerEntityList=Arrays.asList(customerEntity,customerEntity1);
+
+        CustomerEntity customerEntity1 = new CustomerEntity(1L, "ivan", "petrov", null);
+        CustomerEntity customerEntity2 = new CustomerEntity(2L, "anna", "mock", null);
+
+        List<CustomerEntity> customerEntityList=Arrays.asList(customerEntity1,customerEntity2);
 
         when(customerService.getAllCustomers()).thenReturn(customerEntityList);
 
-        mockMvc.perform(get("/customers")
+        mockMvc.perform(get("/api/customers")
         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customers").exists())
-                .andExpect(jsonPath("$.customers[*].customerId").isNotEmpty());
+                .andExpect(jsonPath("$.customers").isArray())
+                .andExpect(jsonPath("$.customers[0].customerId").value(1L))
+                .andExpect(jsonPath("$.customers[0].firstName").value("ivan"))
+                .andExpect(jsonPath("$.customers[0].lastName").value("petrov"))
+                .andExpect(jsonPath("$.customers[0].shipments").value(null))
+
+                .andExpect(jsonPath("$.customers[1].customerId").value(2L))
+                .andExpect(jsonPath("$.customers[1].firstName").value("anna"))
+                .andExpect(jsonPath("$.customers[1].lastName").value("mock"))
+                .andExpect(jsonPath("$.customers[1].shipments").value(null));
+
 
     }
 
@@ -66,7 +76,7 @@ public class CustomerControllerTest {
 
         when(customerService.getCustomerById(1L)).thenReturn(customerEntity);
 
-        mockMvc.perform(get("api/customers" + customerEntity.getCustomerId())
+        mockMvc.perform(get("/api/customers" + customerEntity.getCustomerId())
         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())

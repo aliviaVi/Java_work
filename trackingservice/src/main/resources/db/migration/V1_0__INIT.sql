@@ -15,10 +15,10 @@ CREATE TABLE shipment (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE tracking(
-  track_id SMALLINT UNSIGNED NOT NULL ,
+  tracking_id SMALLINT UNSIGNED NOT NULL ,
   shipment_id SMALLINT  UNSIGNED,
   status ENUM ('shipped','returned','delivered','cancelled'),
-  PRIMARY KEY (track_id),
+  PRIMARY KEY (tracking_id),
   FOREIGN KEY (shipment_id)
   REFERENCES shipment(shipment_id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -38,7 +38,8 @@ VALUES (1, 'letter', 3),
        (3, 'expressEasy', 6),
        (4, 'International Package', 7);
 
-INSERT INTO tracking(track_id, shipment_id, status)
+INSERT INTO tracking(tracking_id, shipment_id, status)
+
 VALUES (3,1,'shipped'),
        (5,3,'returned'),
        (8,4,'delivered'),
