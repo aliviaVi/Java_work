@@ -16,14 +16,16 @@ public class TcpReceiverHandler implements Runnable {
     private static final String INCORRECT_LINE = "incorrect line";
     private String delimiter = "#";
 
-    private volatile static boolean isAlive = true;
+
     private OperationsProvider operationsProvider;
 
+    private AtomicInteger countTasks;
     private Socket socket;
 
-    public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket) {
+    public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket, AtomicInteger countTasks ) {
         this.operationsProvider = operationsProvider;
         this.socket = socket;
+        this.countTasks=countTasks;
     }
 
     public TcpReceiverHandler() {
@@ -38,13 +40,10 @@ public class TcpReceiverHandler implements Runnable {
                     (socket.getInputStream()));
             PrintStream socketOutput=new PrintStream(socket.getOutputStream());
 
-            String line;
-            while (isAlive) {
-              //  countTasks.getAndIncrement();
-                if ((line = socketInput.readLine()) == null) {
-                    isAlive = false;
-                    return;
-                }
+            String line=socketInput.readLine();
+
+               countTasks.getAndIncrement();
+
                 String[] parts = line.split(delimiter);
 
                 if (parts.length != 2) {
@@ -60,13 +59,13 @@ public class TcpReceiverHandler implements Runnable {
 
                     }
                 }
-               // countTasks.decrementAndGet();
+                countTasks.decrementAndGet();
                 socket.close();
 
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 }
 

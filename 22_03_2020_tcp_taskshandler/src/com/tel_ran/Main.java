@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.String.valueOf;
+
 public class Main {
 
-    static final int PORT=2001; // check outerServer Port ARINA
+    static final int TCP_INPUT_PORT=2001; //  check outerServer Port ARINA
     private static final int UDP_PORT = 3001; // check udpSendingPort Lena
     private static final String SERVER_HOST = "localhost";
     public static AtomicInteger counterTasks=new AtomicInteger(0);
@@ -18,7 +20,7 @@ public class Main {
 
 
 
-        ServerSocket server = new ServerSocket(PORT);
+        ServerSocket server = new ServerSocket(String.valueOf(args[0]));//TCP_INPUT_PORT);
         PropertiesService propertiesService=new PropertiesService("config/config.props");
 
 
@@ -30,29 +32,21 @@ public class Main {
         TcpReceiverHandler receiverService;
 
 
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        UdpSender udpSender = new UdpSender(counterTasks, args[1]);
+
+        ScheduledFuture scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
+                udpSender,
+                2,
+                1,
+                TimeUnit.SECONDS);
+
+
         while (true) {
-            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-            UdpSender udpSender = new UdpSender(counterTasks);
-
-            ScheduledFuture scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
-                    udpSender,
-                    2,
-                    1,
-                    TimeUnit.SECONDS);
-
-            scheduledFuture.cancel(false); //if it's correct?
 
             Socket socket = server.accept();
-            counterTasks.getAndIncrement();
-
-
-            receiverService = new TcpReceiverHandler(op,socket);
-
+            receiverService = new TcpReceiverHandler(op,socket, counterTasks);
             executorService.execute(receiverService);
-            counterTasks.decrementAndGet();
-
-
-
         }
 
 
