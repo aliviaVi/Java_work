@@ -20,14 +20,15 @@ public class TcpReceiverHandler implements Runnable {
     private OperationsProvider operationsProvider;
 
     private Socket socket;
+    private AtomicInteger counterTasks;
 
-    public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket) {
+    public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket,AtomicInteger counterTasks) {
+
         this.operationsProvider = operationsProvider;
         this.socket = socket;
+        this.counterTasks=counterTasks;
     }
 
-    public TcpReceiverHandler() {
-    }
 
 
 
