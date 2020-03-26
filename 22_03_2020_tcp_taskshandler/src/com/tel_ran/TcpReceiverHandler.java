@@ -21,12 +21,17 @@ public class TcpReceiverHandler implements Runnable {
 
     private AtomicInteger countTasks;
     private Socket socket;
+    private AtomicInteger counterTasks;
+
+    public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket,AtomicInteger counterTasks) {
+
 
     public TcpReceiverHandler(OperationsProvider operationsProvider, Socket socket, AtomicInteger countTasks ) {
         this.operationsProvider = operationsProvider;
         this.socket = socket;
         this.countTasks=countTasks;
     }
+
 
 
 

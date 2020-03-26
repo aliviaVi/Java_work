@@ -35,6 +35,15 @@ public class Main {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         UdpSender udpSender = new UdpSender(counterTasks, args[1]);
 
+
+        ScheduledFuture scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
+                udpSender,
+                2,
+                1,
+                TimeUnit.SECONDS);
+
+
+
         ScheduledFuture scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(
                 udpSender,
                 2,
@@ -45,7 +54,9 @@ public class Main {
         while (true) {
 
             Socket socket = server.accept();
+ 
             counterTasks.getAndIncrement();
+
             receiverService = new TcpReceiverHandler(op,socket, counterTasks);
             executorService.execute(receiverService);
         }
