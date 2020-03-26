@@ -28,9 +28,6 @@ public class TcpReceiverHandler implements Runnable {
         this.countTasks=countTasks;
     }
 
-    public TcpReceiverHandler() {
-    }
-
 
 
     @Override
@@ -42,7 +39,7 @@ public class TcpReceiverHandler implements Runnable {
 
             String line=socketInput.readLine();
 
-               countTasks.getAndIncrement();
+
 
                 String[] parts = line.split(delimiter);
 

@@ -20,7 +20,7 @@ public class Main {
 
 
 
-        ServerSocket server = new ServerSocket(String.valueOf(args[0]));//TCP_INPUT_PORT);
+        ServerSocket server = new ServerSocket(Integer.parseInt(args[0]));//TCP_INPUT_PORT);
         PropertiesService propertiesService=new PropertiesService("config/config.props");
 
 
@@ -45,6 +45,7 @@ public class Main {
         while (true) {
 
             Socket socket = server.accept();
+            counterTasks.getAndIncrement();
             receiverService = new TcpReceiverHandler(op,socket, counterTasks);
             executorService.execute(receiverService);
         }

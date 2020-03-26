@@ -2,19 +2,17 @@ package com.tel_ran;
 
 import java.io.IOException;
 import java.net.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UdpSender implements Runnable {
 
-    AtomicInteger integer;
+    AtomicInteger counterTasks;
     String server_port;
     DatagramSocket socket = new DatagramSocket();
 
 
-    public UdpSender(AtomicInteger integer , String server_port) throws SocketException {
-        this.integer = integer;
+    public UdpSender(AtomicInteger counterTasks, String server_port) throws SocketException {
+        this.counterTasks = counterTasks;
         this.server_port=server_port;
     }
 
@@ -25,8 +23,8 @@ public class UdpSender implements Runnable {
     @Override
     public void run() {
 
-            String integerString = integer.toString();
-            String res=integerString.concat("#").concat(String.valueOf(server_port));
+            String integerString = counterTasks.toString();
+            String res=integerString.concat("#").concat(server_port);
             byte[] dataOut = res.getBytes();
 
             DatagramPacket packetOut = new DatagramPacket(
