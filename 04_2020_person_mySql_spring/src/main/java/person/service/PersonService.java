@@ -88,7 +88,7 @@ public class PersonService {
         return getAllConstrainedByBirthdays(earliestBirthday,latestBirthday);
     }
 
-    private List<PersonDto> getAllConstrainedByBirthdays(LocalDate earliestBirthday, LocalDate latestBirthday) {
+   public List<PersonDto> getAllConstrainedByBirthdays(LocalDate earliestBirthday, LocalDate latestBirthday) {
         List<Person> persons = personRepository.findByBirthdayBetweenCustom(earliestBirthday, latestBirthday);
 
         return persons.stream()

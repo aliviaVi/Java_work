@@ -22,5 +22,5 @@ public interface IPersonRepository extends CrudRepository<Person,Integer> {
 
     @Modifying
     @Query("delete from Person p where p.lastName like ?1%")
-    public void removeWithLAstNameStarting(String pattern);
+    public void removeWithLastNameStarting(String pattern);
 }
