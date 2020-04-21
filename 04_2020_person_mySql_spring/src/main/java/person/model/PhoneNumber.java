@@ -13,8 +13,8 @@ public class PhoneNumber {
     private int id;
 
     private String number;
-
     @ManyToOne
+    @JoinColumn(columnDefinition = "person_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     Person person;
 
