@@ -1,5 +1,7 @@
 package person.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,16 +18,17 @@ public class Person {
     private String lastName;
     private LocalDate birthday;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "person")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<PhoneNumber> numbers=new ArrayList<>();
 
     public Person() {
     }
 
-    public Person(String name, String lastName, LocalDate bithday){
+    public Person(String name, String lastName, LocalDate birthday){
         this.name=name;
         this.lastName=lastName;
-        this.birthday=bithday;
+        this.birthday=birthday;
     }
 
     public int getId() {

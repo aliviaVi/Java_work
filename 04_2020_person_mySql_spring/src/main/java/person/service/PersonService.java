@@ -30,9 +30,9 @@ public class PersonService {
         Person person=new Person(personDto.firstName,personDto.lastName,personDto.birthday);
         personRepository.save(person);
 
-       /* personDto.numbers.stream()
+        personDto.numbers.stream()
                 .map(numberIn->new PhoneNumber(numberIn.number,person))
-                .forEach(numberRepository::save);*/
+                .forEach(numberRepository::save);
     }
 
     @Transactional
@@ -50,9 +50,9 @@ public class PersonService {
         Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
         PersonDto personDto=new PersonDto(id,person.getName(),person.getLastName(),person.getBirthday());
 
-        /*personDto.numbers=person.getNumbers().stream()
+        personDto.numbers=person.getNumbers().stream()
                 .map(number->new NumberDto(number.getId(),number.getNumber(),number.getPerson().getId()))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());
         return personDto;
     }
 
