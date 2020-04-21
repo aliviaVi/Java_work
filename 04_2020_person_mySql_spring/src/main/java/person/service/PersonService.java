@@ -1,9 +1,12 @@
 package person.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import person.dto.NumberDto;
 import person.dto.PersonDto;
+import person.mapper.NumberMapper;
+import person.mapper.PersonMapper;
 import person.model.Person;
 import person.model.PhoneNumber;
 import person.repository.INumberRepository;
@@ -20,6 +23,10 @@ public class PersonService {
     private static final String PERSON_NOT_FOUND= "Person not found";
     final IPersonRepository personRepository;
     final INumberRepository numberRepository;
+    @Autowired
+    PersonMapper personMapper;
+    @Autowired
+    NumberMapper numberMapper;
 
     public PersonService(IPersonRepository personRepository, INumberRepository numberRepository) {
         this.personRepository = personRepository;
@@ -39,6 +46,7 @@ public class PersonService {
     public void edit(PersonDto personDto){
         Person person = personRepository.findById(personDto.id).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
 
+
         person.setName(personDto.firstName);
         person.setLastName(personDto.lastName);
         person.setBirthday(personDto.birthday);
@@ -48,10 +56,12 @@ public class PersonService {
 
     public PersonDto getById(int id){
         Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
-        PersonDto personDto=new PersonDto(id,person.getName(),person.getLastName(),person.getBirthday());
+
+        PersonDto personDto = personMapper.mapPersonToPersonDto(person);
+       // PersonDto personDto=new PersonDto(id,person.getName(),person.getLastName(),person.getBirthday());
 
         personDto.numbers=person.getNumbers().stream()
-                .map(number->new NumberDto(number.getId(),number.getNumber(),number.getPerson().getId()))
+                .map(numberMapper::mapPhoneNumberToNumberDto)
                 .collect(Collectors.toList());
         return personDto;
     }
@@ -60,7 +70,8 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-    public void removeByLastNAmeWithPAttern(String pattern){
+    @Transactional
+    public void removeByLastNameWithPattern(String pattern){
         personRepository.removeWithLastNameStarting(pattern);
     }
 
@@ -68,20 +79,14 @@ public class PersonService {
         List<Person> persons = personRepository.findAll();
 
         return persons.stream()
-                .map(person -> new PersonDto(person.getId(),
-                        person.getName(),
-                        person.getLastName(),
-                        person.getBirthday()))
+                .map(personMapper::mapPersonToPersonDto)
                 .collect(Collectors.toList());
     }
 
     public List<PersonDto> getAllByName(String name){
         List<Person> personsList= personRepository.findByName(name);
         return personsList.stream()
-                .map(person -> new PersonDto(person.getId(),
-                        person.getName(),
-                        person.getLastName(),
-                        person.getBirthday()))
+                .map(personMapper::mapPersonToPersonDto)
                 .collect(Collectors.toList());
     }
 
@@ -96,10 +101,17 @@ public class PersonService {
         List<Person> persons = personRepository.findByBirthdayBetweenCustom(earliestBirthday, latestBirthday);
 
         return persons.stream()
-                .map(person -> new PersonDto(person.getId(),
-                        person.getName(),
-                        person.getLastName(),
-                        person.getBirthday()))
+                .map(personMapper::mapPersonToPersonDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<NumberDto> getAllPersonsPhoneNumbers(int personId){
+        Person person = personRepository.findById(personId).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
+        List<PhoneNumber> numbers = person.getNumbers();
+
+
+        return numbers.stream()
+                .map(numberMapper::mapPhoneNumberToNumberDto)
                 .collect(Collectors.toList());
 
     }

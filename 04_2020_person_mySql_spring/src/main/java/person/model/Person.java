@@ -1,5 +1,8 @@
 package person.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -9,21 +12,24 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Setter
     private String name;
+    @Setter
     private String lastName;
+    @Setter
     private LocalDate birthday;
 
     @OneToMany(mappedBy = "person")
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<PhoneNumber> numbers=new ArrayList<>();
 
-    public Person() {
-    }
 
     public Person(String name, String lastName, LocalDate birthday){
         this.name=name;
@@ -31,39 +37,11 @@ public class Person {
         this.birthday=birthday;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public List<PhoneNumber> getNumbers(){
         return Collections.unmodifiableList(numbers);
     }
 
-    public void addNumber(PhoneNumber number){
+   /* public void addNumber(PhoneNumber number){
         numbers.add(number);
-    }
+    }*/
 }

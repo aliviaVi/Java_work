@@ -3,8 +3,8 @@ package person.controller;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import person.dto.NumberDto;
 import person.dto.PersonDto;
-import person.model.Person;
 import person.service.PersonService;
 
 import javax.validation.Valid;
@@ -19,8 +19,10 @@ public class PersonController {
     private static final long EARLIEST_BIRTHDAY=1000;
     private PersonService personService;
 
+
     public PersonController(PersonService personService) {
         this.personService = personService;
+
     }
 
     @PostMapping("/person")
@@ -74,6 +76,12 @@ public class PersonController {
 
     @DeleteMapping("/person/lastName/{pattern}")
     public void removeLastNameWithPattern(@PathVariable String pattern){
-        personService.removeByLastNAmeWithPAttern(pattern);
+        personService.removeByLastNameWithPattern(pattern);
+    }
+
+    @GetMapping("/person/{id}/numbers")
+    public List<NumberDto> getAllPersonsPhoneNumbers(@PathVariable int id){
+        List<NumberDto> allPersonsPhoneNumbers = personService.getAllPersonsPhoneNumbers(id);
+        return allPersonsPhoneNumbers;
     }
 }

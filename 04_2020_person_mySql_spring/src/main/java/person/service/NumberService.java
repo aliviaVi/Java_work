@@ -1,22 +1,25 @@
 package person.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import person.dto.NumberDto;
-import person.dto.PersonDto;
+import person.mapper.NumberMapper;
 import person.model.Person;
 import person.model.PhoneNumber;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import person.repository.INumberRepository;
 import person.repository.IPersonRepository;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class NumberService {
 
+    private static final String NUMBER_NOT_FOUND= "Phone number not found";
     private INumberRepository numberRepository;
     private IPersonRepository personRepository;
+    @Autowired
+    private NumberMapper numberMapper;
 
     public NumberService(INumberRepository numberRepository, IPersonRepository personRepository) {
         this.numberRepository = numberRepository;
@@ -28,12 +31,13 @@ public class NumberService {
         int personId = numberDto.personId;
         Person person = personRepository.findById(personId).get();
         PhoneNumber phoneNumber=new PhoneNumber(numberDto.number,person);
-        person.addNumber(phoneNumber);
+       // person.addNumber(phoneNumber);
+        numberRepository.save(phoneNumber);
     }
 
     @Transactional
     public void edit(NumberDto numberDto){
-        PhoneNumber phoneNumber = numberRepository.findById(numberDto.id).get();
+        PhoneNumber phoneNumber = numberRepository.findById(numberDto.id).orElseThrow(()->new EntityNotFoundException(NUMBER_NOT_FOUND));
         phoneNumber.setNumber(numberDto.number);
 
         numberRepository.save(phoneNumber);
@@ -43,25 +47,12 @@ public class NumberService {
         numberRepository.deleteById(id);
     }
 
-    public List<NumberDto> getAllPersonsPhoneNumbers(int personId){
-        Person person = personRepository.findById(personId).get();
-        List<PhoneNumber> numbers = person.getNumbers();
 
-        List<NumberDto> numberDtos = numbers.stream()
-                .map(phoneNumber -> new NumberDto(phoneNumber.getId(),
-                        phoneNumber.getNumber(),
-                        phoneNumber.getId()))
-                .collect(Collectors.toList());
-
-        return numberDtos;
-    }
 
     public NumberDto getNumberById(int id){
-        PhoneNumber phoneNumber = numberRepository.findById(id).get();
+        PhoneNumber phoneNumber = numberRepository.findById(id).orElseThrow(()->new EntityNotFoundException(NUMBER_NOT_FOUND));
 
-        NumberDto numberDto=new NumberDto(phoneNumber.getId(),
-                phoneNumber.getNumber(),
-                phoneNumber.getId());
-        return numberDto;
+        return numberMapper.mapPhoneNumberToNumberDto(phoneNumber);
+
     }
 }
