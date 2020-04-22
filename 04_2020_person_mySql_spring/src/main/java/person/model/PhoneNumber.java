@@ -21,7 +21,6 @@ public class PhoneNumber {
     private String number;
 
     @ManyToOne
-    @JoinColumn(columnDefinition = "person_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     Person person;
 

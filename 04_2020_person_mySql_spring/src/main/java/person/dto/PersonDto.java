@@ -1,7 +1,6 @@
 package person.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +13,6 @@ import java.util.List;
 
 @FullName(10)
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class PersonDto {
 
@@ -36,7 +34,10 @@ public class PersonDto {
     @Setter
     public List<NumberDto> numbers;
 
-    public PersonDto(int id, String name, String lastName, LocalDate birthday) {
-
+    public PersonDto( int id, String firstName, String lastName, LocalDate birthday) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
     }
 }

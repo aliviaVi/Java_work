@@ -74,7 +74,7 @@ public class PersonController {
         return personService.getAllConstrainedByBirthdays(after,before);
     }
 
-    @DeleteMapping("/person/lastName/{pattern}")
+    @DeleteMapping("/person/last-name/{pattern}")
     public void removeLastNameWithPattern(@PathVariable String pattern){
         personService.removeByLastNameWithPattern(pattern);
     }

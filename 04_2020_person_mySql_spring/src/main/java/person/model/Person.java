@@ -3,7 +3,8 @@ package person.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class Person {
     private LocalDate birthday;
 
     @OneToMany(mappedBy = "person")
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private List<PhoneNumber> numbers=new ArrayList<>();
 
 

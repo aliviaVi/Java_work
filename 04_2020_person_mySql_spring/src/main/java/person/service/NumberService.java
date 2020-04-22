@@ -1,6 +1,5 @@
 package person.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import person.dto.NumberDto;
@@ -18,12 +17,12 @@ public class NumberService {
     private static final String NUMBER_NOT_FOUND= "Phone number not found";
     private INumberRepository numberRepository;
     private IPersonRepository personRepository;
-    @Autowired
-    private NumberMapper numberMapper;
+    private final NumberMapper numberMapper;
 
-    public NumberService(INumberRepository numberRepository, IPersonRepository personRepository) {
+    public NumberService(INumberRepository numberRepository, IPersonRepository personRepository, NumberMapper numberMapper) {
         this.numberRepository = numberRepository;
         this.personRepository = personRepository;
+        this.numberMapper = numberMapper;
     }
 
     public void add(NumberDto numberDto){
