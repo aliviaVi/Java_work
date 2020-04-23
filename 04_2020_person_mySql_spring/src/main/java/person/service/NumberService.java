@@ -10,6 +10,8 @@ import person.repository.INumberRepository;
 import person.repository.IPersonRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NumberService {
@@ -53,5 +55,10 @@ public class NumberService {
 
         return numberMapper.mapPhoneNumberToNumberDto(phoneNumber);
 
+    }
+    public List<NumberDto> getByPersonId(int personId){
+        return numberRepository.findByPersonId(personId).stream()
+                .map(numberMapper::mapPhoneNumberToNumberDto)
+                .collect(Collectors.toList());
     }
 }

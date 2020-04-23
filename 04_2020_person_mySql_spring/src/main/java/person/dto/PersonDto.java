@@ -9,6 +9,7 @@ import person.validation.annotation.FullName;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @FullName(10)
@@ -32,7 +33,7 @@ public class PersonDto {
     public LocalDate birthday;
 
     @Setter
-    public List<NumberDto> numbers;
+    public List<NumberDto> numbers=new ArrayList<>();
 
     public PersonDto( int id, String firstName, String lastName, LocalDate birthday) {
         this.id = id;
