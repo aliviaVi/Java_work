@@ -52,13 +52,15 @@ public class NumberService {
 
     public NumberDto getNumberById(int id){
         PhoneNumber phoneNumber = numberRepository.findById(id).orElseThrow(()->new EntityNotFoundException(NUMBER_NOT_FOUND));
+return new NumberDto(phoneNumber.getId(),phoneNumber.getNumber(),phoneNumber.getPerson().getId());
 
-        return numberMapper.mapPhoneNumberToNumberDto(phoneNumber);
+       // return numberMapper.mapPhoneNumberToNumberDto(phoneNumber);
 
     }
     public List<NumberDto> getByPersonId(int personId){
         return numberRepository.findByPersonId(personId).stream()
-                .map(numberMapper::mapPhoneNumberToNumberDto)
+                .map(phoneNumber -> new NumberDto(phoneNumber.getId(),phoneNumber.getNumber(),phoneNumber.getPerson().getId()))
+                //.map(numberMapper::mapPhoneNumberToNumberDto)
                 .collect(Collectors.toList());
     }
 }

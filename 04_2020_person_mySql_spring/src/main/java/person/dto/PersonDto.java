@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@FullName(10)
+@FullName(20)
 @NoArgsConstructor
 @Getter
 public class PersonDto {
@@ -40,5 +40,27 @@ public class PersonDto {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersonDto personDto = (PersonDto) o;
+
+        if (firstName != null ? !firstName.equals(personDto.firstName) : personDto.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(personDto.lastName) : personDto.lastName != null) return false;
+        if (birthday != null ? !birthday.equals(personDto.birthday) : personDto.birthday != null) return false;
+        return numbers != null ? numbers.equals(personDto.numbers) : personDto.numbers == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + (numbers != null ? numbers.hashCode() : 0);
+        return result;
     }
 }

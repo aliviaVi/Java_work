@@ -47,9 +47,9 @@ public class PersonService {
         Person person = personRepository.findById(personDto.id).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
 
 
-        person.setName(personDto.firstName);
-        person.setLastName(personDto.lastName);
-        person.setBirthday(personDto.birthday);
+        person.setName(personDto.getFirstName());
+        person.setLastName(personDto.getLastName());
+        person.setBirthday(personDto.getBirthday());
 
         personRepository.save(person);
     }
@@ -57,13 +57,19 @@ public class PersonService {
     public PersonDto getById(int id){
         Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(PERSON_NOT_FOUND));
 
-        PersonDto personDto = personMapper.mapPersonToPersonDto(person);
-       // PersonDto personDto=new PersonDto(id,person.getName(),person.getLastName(),person.getBirthday());
+     //   PersonDto personDto = personMapper.mapPersonToPersonDto(person);
+        PersonDto personDto=new PersonDto(id,person.getName(),person.getLastName(),person.getBirthday());
 
-        personDto.numbers=person.getNumbers().stream()
-                .map(numberMapper::mapPhoneNumberToNumberDto)
-                .collect(Collectors.toList());
-        return personDto;
+        if(person.getNumbers()==null){
+            return personDto;
+        }else{
+            personDto.numbers=person.getNumbers().stream()
+                    .map(phoneNumber -> new NumberDto(phoneNumber.getId(),phoneNumber.getNumber(),phoneNumber.getPerson().getId()))
+                    //.map(numberMapper::mapPhoneNumberToNumberDto)
+                    .collect(Collectors.toList());
+            return personDto;
+        }
+
     }
 
     public void removeById(int id){
@@ -78,15 +84,18 @@ public class PersonService {
     public List<PersonDto> getAll(){
         List<Person> persons = personRepository.findAll();
 
+
         return persons.stream()
-                .map(personMapper::mapPersonToPersonDto)
+                .map(person -> new PersonDto(person.getId(),person.getName(),person.getLastName(),person.getBirthday()))
+                //.map(personMapper::mapPersonToPersonDto)
                 .collect(Collectors.toList());
     }
 
     public List<PersonDto> getAllByName(String name){
         List<Person> personsList= personRepository.findByName(name);
         return personsList.stream()
-                .map(personMapper::mapPersonToPersonDto)
+                .map(person -> new PersonDto(person.getId(),person.getName(),person.getLastName(),person.getBirthday()))
+                //.map(personMapper::mapPersonToPersonDto)
                 .collect(Collectors.toList());
     }
 
@@ -111,7 +120,8 @@ public class PersonService {
 
 
         return numbers.stream()
-                .map(numberMapper::mapPhoneNumberToNumberDto)
+                .map(phoneNumber -> new NumberDto(phoneNumber.getId(),phoneNumber.getNumber(),phoneNumber.getPerson().getId()))
+                //.map(numberMapper::mapPhoneNumberToNumberDto)
                 .collect(Collectors.toList());
 
     }

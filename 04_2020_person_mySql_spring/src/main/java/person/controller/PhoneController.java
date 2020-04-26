@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import person.dto.NumberDto;
 import person.service.NumberService;
 
+import java.util.List;
+
+
+
 
 @RestController
 public class PhoneController {
@@ -15,8 +19,14 @@ public class PhoneController {
         this.numberService = numberService;
     }
 
-    @PostMapping("/number")
-    public void create(@RequestBody NumberDto numberDto){
+
+    @GetMapping("/person/{personId}/number")
+    public List<NumberDto> getNumbersByPersonId(@PathVariable int personId){
+        return numberService.getByPersonId(personId);
+    }
+    @PostMapping("/person/{personId}/number")
+    public void create(@RequestBody NumberDto numberDto,@PathVariable int personId){
+        numberDto.personId=personId;
         numberService.add(numberDto);
     }
 
@@ -31,8 +41,7 @@ public class PhoneController {
 
     @GetMapping("/number/{id}")
     public NumberDto getNumberById(@PathVariable int id){
-        NumberDto numberById = numberService.getNumberById(id);
-        return numberById;
+        return  numberService.getNumberById(id);
     }
 
 
