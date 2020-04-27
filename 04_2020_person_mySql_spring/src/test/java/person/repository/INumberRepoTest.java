@@ -15,24 +15,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 public class INumberRepoTest {
-    @Autowired
-    TestEntityManager entityManager;
 
     @Autowired
     INumberRepository numberRepository;
+    @Autowired
+    TestEntityManager entityManager;
+
 
 
     @Test
-    void should_return_number_by_person_id(){
+    void test_findByPersonId_should_return_number_by_person_id(){
         NumberDto numberDto=new NumberDto(1,"number1",2);
         Person person=new Person(2,"Vasya","Pupkin", LocalDate.now().minusYears(23));
 
         PhoneNumber phoneNumber=new PhoneNumber(numberDto.number,person);
 
-        entityManager.persist(phoneNumber);
-        entityManager.flush();
+        numberRepository.save(phoneNumber);
 
-        List<PhoneNumber> byPersonId = numberRepository.findByPersonId(person.getId());
+        List<PhoneNumber> byPersonId = numberRepository.findByPersonId(numberDto.id);
 
         assertEquals(1,byPersonId.size());
 

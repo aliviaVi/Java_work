@@ -1,7 +1,6 @@
 package person.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import person.dto.PersonDto;
 import person.model.Person;
 
@@ -11,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersonMapperTest {
 
-@Autowired
-    PersonMapper personMapper;
+    PersonMapper personMapper=new PersonMapper();
 
 @Test
     void shouldReturnPersonDto(){

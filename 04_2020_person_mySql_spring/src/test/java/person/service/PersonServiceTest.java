@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import person.dto.NumberDto;
 import person.dto.PersonDto;
@@ -15,10 +16,8 @@ import person.model.PhoneNumber;
 import person.repository.INumberRepository;
 import person.repository.IPersonRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,10 +31,10 @@ class PersonServiceTest {
     IPersonRepository personRepository;
     @Mock
     INumberRepository   numberRepository;
-    @Mock
-    PersonMapper personMapper;
-    @Mock
-    NumberMapper numberMapper;
+    @Spy
+    PersonMapper personMapper= new PersonMapper();
+    @Spy
+    NumberMapper numberMapper=new NumberMapper();
 
     @InjectMocks
     PersonService personService;
@@ -88,7 +87,7 @@ class PersonServiceTest {
 
 
     @Test
-    void edit() {
+    void test_edit_schuold_change_numberInBD() {
         LocalDate birthday=LocalDate.now().minusYears(25);
 
         PersonDto personDto=new PersonDto(5,"Petya", "Vasinyanovich",LocalDate.now().minusYears(25));
@@ -105,17 +104,17 @@ class PersonServiceTest {
 
     }
 
-    @Test
+   /* @Test
     void edit_withException(){
         PersonDto personDto=new PersonDto(6,"Petya", "Vasinyanovich",LocalDate.now().minusYears(25));
 
       //  when(personService.edit(personDto).thenThrow(new EntityNotFoundException();
         doThrow(EntityNotFoundException.class).when(personRepository).findById(personDto.getId());
         personService.edit(personDto);
-    }
+    }*/
 
     @Test
-    void getById() {
+    void test_getById_should_return_personById() {
         LocalDate birthday=LocalDate.now().minusYears(25);
 
         PersonDto personDto=new PersonDto(5,"Vasya","Vasin",LocalDate.now().minusYears(25));
@@ -138,7 +137,7 @@ class PersonServiceTest {
     }
 
     @Test
-    void removeById() {
+    void test_removeById_should_delete_personById() {
         LocalDate birthday=LocalDate.now().minusYears(25);
 
         PersonDto personDto=new PersonDto(5,"Vasya","Vasin",birthday);
@@ -151,22 +150,26 @@ class PersonServiceTest {
     }
 
     @Test
-    void getAll() {
+    void test_getAll_should_return_allPersons() {
         LocalDate birthday=LocalDate.now().minusYears(25);
 
-        Person expectedFromDB=new Person(5,"Vasya","Vasin",birthday);
+        Person person1=new Person("Vasya","Vasin",birthday);
+        Person person2=new Person("Vasya1","Vasin1",birthday);
 
-        when(personRepository.findAll()).thenReturn(Collections.singletonList(expectedFromDB));
+        List<Person> personFromDB=Arrays.asList(person1,person2);
+
+        when(personRepository.findAll()).thenReturn(personFromDB);
+
         List<PersonDto> personDtoList = personService.getAll();
 
-        assertEquals(1,personDtoList.size());
+        assertEquals(2,personDtoList.size());
     }
 
     @Test
-    void getAllByName() {
+    void test_getAllByName() {
         LocalDate birthday=LocalDate.now().minusYears(25);
 
-        List<Person> personsList=Arrays.asList(new Person(5,"Vasya","Vasin",birthday), new Person(2,"Vasya","Mock",LocalDate.now().minusYears(12)));
+        List<Person> personsList=Arrays.asList(new Person("Vasya","Vasin",birthday), new Person("Vasya","Mock",LocalDate.now().minusYears(12)));
         String name="Vasya";
         when(personRepository.findByName(name)).thenReturn(personsList);
 
@@ -178,7 +181,7 @@ class PersonServiceTest {
     }
 
     @Test
-    void getAllPersonsPhoneNumbers() {
+    void test_getAllPersonsPhoneNumbers() {
         LocalDate birthday = LocalDate.now().minusYears(25);
         PersonDto personIn = new PersonDto(0, "Vasya", "Vasin", birthday);
         personIn.numbers = Arrays.asList(new NumberDto(0, "number1", 0));

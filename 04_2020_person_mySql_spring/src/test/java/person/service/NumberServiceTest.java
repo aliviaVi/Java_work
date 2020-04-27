@@ -5,8 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import person.dto.NumberDto;
+import person.mapper.NumberMapper;
+import person.mapper.PersonMapper;
 import person.model.Person;
 import person.model.PhoneNumber;
 import person.repository.INumberRepository;
@@ -25,13 +28,17 @@ public class NumberServiceTest {
     INumberRepository numberRepository;
     @Mock
     IPersonRepository personRepository;
+    @Spy
+    PersonMapper personMapper= new PersonMapper();
+    @Spy
+    NumberMapper numberMapper=new NumberMapper();
 
     @InjectMocks
     NumberService numberService;
 
 
     @Test
-    void should_add_number(){
+    void test_add_should_add_number(){
         NumberDto numberDto=new NumberDto(1,"number1",2);
         Person person=new Person(2,"Vasya","Pupkin", LocalDate.now().minusYears(23));
 
@@ -52,24 +59,25 @@ public class NumberServiceTest {
     }
 
     @Test
-    void should_edit_number(){
+    void test_edit_should_edit_number(){
         NumberDto numberDto=new NumberDto(1,"number1",2);
-        Person person=new Person(2,"Vasya","Pupkin", LocalDate.now().minusYears(23));
+        Person person=new Person("Vasya","Pupkin", LocalDate.now().minusYears(23));
 
-        PhoneNumber phoneNumber=new PhoneNumber(numberDto.number,person);
-        when(numberRepository.findById(numberDto.id)).thenReturn(java.util.Optional.of(phoneNumber));
+        PhoneNumber phoneNumberFromDB=new PhoneNumber("number2",person);
+        when(numberRepository.findById(numberDto.id)).thenReturn(java.util.Optional.of(phoneNumberFromDB));
 
         numberService.edit(numberDto);
 
-        verify(numberRepository,times(1)).save(phoneNumber);
+        verify(numberRepository,times(1)).save(phoneNumberFromDB);
 
         verify(numberRepository,times(1)).save(argThat(number->
                 number.getNumber().equals(numberDto.number)));
 
+
     }
 
     @Test
-    void should_delete_number_by_Id(){
+    void test_removeById_should_delete_number_by_numberId(){
         NumberDto numberDto=new NumberDto(1,"number1",2);
         Person person=new Person(2,"Vasya","Pupkin", LocalDate.now().minusYears(23));
 
@@ -81,7 +89,7 @@ public class NumberServiceTest {
     }
 
     @Test
-    void should_return_numberDto_by_id(){
+    void test_getNumberById_should_return_numberDto_by_id(){
         NumberDto numberDto=new NumberDto(1,"number1",2);
         Person person=new Person(2,"Vasya","Pupkin", LocalDate.now().minusYears(23));
 
