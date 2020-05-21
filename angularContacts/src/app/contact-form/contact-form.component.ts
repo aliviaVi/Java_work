@@ -21,12 +21,18 @@ export class ContactFormComponent implements OnInit {
   ngOnInit(): void {
     this.isAddingState = true;
     this.contact = new Contact();
+    this.contact.id = 1;
+  }
+  onClickAdd(){
+    console.log(this.contact);
+    this.contactService.addContact(this.contact)
+      .subscribe(value => this.contact = value);
   }
 
-  onClickAdd() {
+  /*onClickAdd() {
     console.log(this.contact);
     this.contactService.add(this.contact);
-  }
+  }*/
   clearForm(){
     this.contact = new Contact();
   }
