@@ -1,13 +1,13 @@
-package com.tel_ran.tracking_service;
+package com.telran.contacts_js;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TrackingServiceApplication {
+public class ContactsJsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TrackingServiceApplication.class, args);
+        SpringApplication.run(ContactsJsApplication.class, args);
     }
 
 }
