@@ -11,15 +11,15 @@ export class ContactService {
   private readonly contactsUrl: string;
 
   constructor(private http: HttpClient) {
-    this.contactsUrl = 'http://localhost:8080/contact';
+    this.contactsUrl = 'http://localhost:8080';
   }
 
   public getContacts(): Observable<Contact[]>{
-    return this.http.get<Contact[]>(this.contactsUrl);
+    return this.http.get<Contact[]>(this.contactsUrl + '/contact');
   }
 
   public addContact(contact: Contact){
-    return this.http.post<Contact>(this.contactsUrl, contact);
+    return this.http.post<Contact>(this.contactsUrl + '/contact', contact);
   }
 
   add(contact: Contact): void {

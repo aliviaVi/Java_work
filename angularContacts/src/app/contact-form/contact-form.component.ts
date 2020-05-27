@@ -10,6 +10,7 @@ import {ContactService} from '../service/contact.service';
 export class ContactFormComponent implements OnInit {
 
   contact: Contact;
+  contacts: Contact[];
 
   isAddingState: boolean;
   private contactService: ContactService;
@@ -35,5 +36,12 @@ export class ContactFormComponent implements OnInit {
   }*/
   clearForm(){
     this.contact = new Contact();
+  }
+
+
+  onClickGetAll() {
+
+    this.contactService.getContacts().subscribe(value => this.contacts = value);
+    console.log(this.contacts);
   }
 }

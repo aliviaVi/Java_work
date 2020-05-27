@@ -2,16 +2,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Contact} from '../model/contact';
 import {ContactService} from '../service/contact.service';
-
 @Component({
   selector: 'app-contact-item',
   templateUrl: './contact-item.component.html',
   styleUrls: ['./contact-item.component.css']
 })
 export class ContactItemComponent implements OnInit {
-/*
   @Input()
-  contact: Contact;*/
+  contact: Contact;
 
   @Input()
   contacts: Contact[];
@@ -20,8 +18,9 @@ export class ContactItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*this.contactService.getContacts()
-      .subscribe(value => this.contacts = value);*/
+    this.contactService.getContacts()
+      .subscribe(value => this.contacts = value);
   }
+
 
 }
